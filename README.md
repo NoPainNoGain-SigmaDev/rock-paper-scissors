@@ -4,8 +4,8 @@ This is a simple Rock Paper Scissors game built as part of [The Odin Project](ht
 
 ---
 
-## 🔗 [Unchain the magic](#)  
-not live yet
+## 🔗 [Unchain the magic](https://nopainnogain-sigmadev.github.io/rock-paper-scissors/)  
+[Click Here!](https://nopainnogain-sigmadev.github.io/rock-paper-scissors/)
 
 ---
 
