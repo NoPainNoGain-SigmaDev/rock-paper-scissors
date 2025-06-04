@@ -1,75 +1,102 @@
 //Rock Paper Scissors - The Odin Project
 //Built with sweat by @NoPainNoGain-SigmaDev
 
-//getComputerChoice generates a random number
-//From 0 to 2 inclusive, and returns either R, P or S
+//DOM elements
+const rockBtn = document.getElementById("rock-btn");
+const paperBtn = document.getElementById("paper-btn");
+const scissorsBtn = document.getElementById("scissors-btn");
+const roundCountDisplay = document.getElementById("round-count");
+const humanScoreDisplay = document.getElementById("human-score");
+const computerScoreDisplay = document.getElementById("computer-score");
+const resultDisplay = document.getElementById("result");
+const winnerDisplay = document.getElementById("winner");
+
 const getComputerChoice = () => {
   const number = Math.floor(Math.random() * 3);
   return number === 0 ? "rock" : number === 1 ? "paper" : "scissors";
 };
 
-//getHumanChoice returns the user input
-const getHumanChoice = () => {
-  return prompt("Your turn!\nRock, Paper or Scissors:");
+//Global Variables
+let humanScore = 0;
+let computerScore = 0;
+let roundCount = 0;
+
+const updateScore = () => {
+  humanScoreDisplay.textContent = humanScore;
+  computerScoreDisplay.textContent = computerScore;
+  roundCountDisplay.textContent = roundCount + 1;
 };
 
-//Rock > Scissors
-//Scissors > Paper
-//Paper > Rock
+const displayResult = (msg) => {
+  resultDisplay.textContent = msg;
+};
+const displayWinner = (msg) => {
+  winnerDisplay.textContent = msg;
+};
 
-//Plays the game 5 times and announces a winner
-const playGame = () => {
-  let humanScore = 0;
-  let computerScore = 0;
+const clear = () => {
+  humanScore = 0;
+  computerScore = 0;
+  roundCount = 0;
+  updateScore();
+  displayResult("");
+  displayWinner("");
+};
 
-  //playRound compares the computer with the human
-  //if the computer did not win then the human won
+const playRound = (humanChoice) => {
+  const computerChoice = getComputerChoice();
+  roundCount++;
 
-  const playRound = (humanChoice, computerChoice) => {
-    let human = humanChoice.toLowerCase();
-    let computer = computerChoice.toLowerCase();
-
-    if (human === computer) {
-      console.log("DRAW! No winner");
-      return;
-    }
-
-    if (
-      (computer === "rock" && human === "scissors") ||
-      (computer === "paper" && human === "rock") ||
-      (computer === "scissors" && human === "paper")
-    ) {
-      console.log(
-        "COMPUTER Wins! " +
-          computerChoice.toUpperCase() +
-          " beats " +
-          humanChoice.toUpperCase()
-      );
-      computerScore++;
-    } else {
-      console.log(
-        "You Win! " +
-          humanChoice.toUpperCase() +
-          " beats " +
-          computerChoice.toUpperCase()
-      );
-      humanScore++;
-    }
-  };
-
-  for (let i = 0; i < 5; i++) {
-    let human = getHumanChoice();
-    let computer = getComputerChoice();
-
-    playRound(human, computer);
+  if (humanChoice === computerChoice) {
+    displayResult("DRAW! No winner");
+    return;
   }
 
-  if (humanScore > computerScore) {
-    console.log("COMPUTER WAS DEFEATED, YOU WIN!");
+  if (
+    (computerChoice === "rock" && humanChoice === "scissors") ||
+    (computerChoice === "paper" && humanChoice === "rock") ||
+    (computerChoice === "scissors" && humanChoice === "paper")
+  ) {
+    displayResult(
+      "COMPUTER Wins! " +
+        computerChoice.toUpperCase() +
+        " beats " +
+        humanChoice.toUpperCase()
+    );
+    computerScore++;
   } else {
-    console.log("YOU WERE DEFEATED, COMPUTER WINS!");
+    displayResult(
+      "You Win! " +
+        humanChoice.toUpperCase() +
+        " beats " +
+        computerChoice.toUpperCase()
+    );
+    humanScore++;
+  }
+
+  return;
+};
+
+const playGame = (humanChoice) => {
+  playRound(humanChoice);
+  updateScore();
+
+  if (humanScore === 5) {
+    displayWinner("COMPUTER WAS DEFEATED, YOU WIN!");
+    setTimeout(clear, 5000);
+  } else if (computerScore === 5) {
+    displayWinner("YOU WERE DEFEATED, COMPUTER WINS!");
+    setTimeout(clear, 5000);
   }
 };
 
-//Game begins here
-playGame();
+rockBtn.addEventListener("click", () => {
+  playGame("rock");
+});
+
+paperBtn.addEventListener("click", () => {
+  playGame("paper");
+});
+scissorsBtn.addEventListener("click", () => {
+  playGame("scissors");
+});
